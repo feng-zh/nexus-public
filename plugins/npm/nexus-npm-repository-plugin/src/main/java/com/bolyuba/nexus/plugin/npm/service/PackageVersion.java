@@ -70,8 +70,11 @@ public class PackageVersion
 
   public String getDistTarballFilename() {
     String tarballUrl = getDistTarball();
-    int idx = tarballUrl.lastIndexOf("/");
+    int idx = tarballUrl.lastIndexOf("/-/");
     if (idx != -1) {
+      return tarballUrl.substring(idx + 3);
+    }
+    else if ((idx = tarballUrl.lastIndexOf("/")) != -1) {
       return tarballUrl.substring(idx + 1);
     }
     else {

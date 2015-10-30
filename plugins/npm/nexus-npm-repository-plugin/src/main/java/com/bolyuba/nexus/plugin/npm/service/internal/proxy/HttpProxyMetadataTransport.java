@@ -219,17 +219,22 @@ public class HttpProxyMetadataTransport
       httpClientManager.release(npmProxyRepository, npmProxyRepository.getRemoteStorageContext());
     }
   }
-
+  
   /**
    * Builds and return registry URI for given package name.
    */
   private String buildUri(final NpmProxyRepository npmProxyRepository, final String pathElem) {
     final String registryUrl = npmProxyRepository.getRemoteUrl();
+    String path = pathElem;
+    if (path.startsWith("@")) {
+    	// scope name
+    	path = path.replaceFirst("/", "%2f");
+    }
     if (registryUrl.endsWith("/")) {
-      return registryUrl + pathElem;
+      return registryUrl + path;
     }
     else {
-      return registryUrl + "/" + pathElem;
+      return registryUrl + "/" + path;
     }
   }
 

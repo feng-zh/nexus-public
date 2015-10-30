@@ -119,12 +119,18 @@ public class ProxyMetadataServiceImpl
    */
   private final static Pattern TARBALL_PATH_PATTERN = Pattern
       .compile("/([[a-z][A-Z][0-9]-_\\.]+)/-/([[a-z][A-Z][0-9]-_\\.]+\\.tgz)");
+  
+  private final static Pattern SCOPE_TARBALL_PATH_PATTERN = Pattern
+	      .compile("/(@[[a-z][A-Z][0-9]-_\\.]+/[[a-z][A-Z][0-9]-_\\.]+)/-/(@[[a-z][A-Z][0-9]-_\\.]+/[[a-z][A-Z][0-9]-_\\.]+\\.tgz)");
 
   @Nullable
   @Override
   public TarballRequest createTarballRequest(final ResourceStoreRequest request) throws IOException {
     checkNotNull(request);
-    final Matcher matcher = TARBALL_PATH_PATTERN.matcher(request.getRequestPath());
+    Matcher matcher = SCOPE_TARBALL_PATH_PATTERN.matcher(request.getRequestPath());
+    if (!matcher.matches()) {
+    	matcher = TARBALL_PATH_PATTERN.matcher(request.getRequestPath());
+    }
     TarballRequest tarballRequest = null;
 
     if (matcher.matches()) {
